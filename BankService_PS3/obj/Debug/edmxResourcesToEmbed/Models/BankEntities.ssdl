@@ -1,0 +1,132 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="BankModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="AccountLogs">
+    <Key>
+      <PropertyRef Name="LogId" />
+    </Key>
+    <Property Name="LogId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="AccountId" Type="varchar" MaxLength="36" />
+    <Property Name="Amount" Type="float" />
+    <Property Name="LogDate" Type="datetime" />
+    <Property Name="ActionLogs" Type="char" MaxLength="1" />
+  </EntityType>
+  <EntityType Name="Accounts">
+    <Key>
+      <PropertyRef Name="AccountId" />
+    </Key>
+    <Property Name="AccountId" Type="varchar" MaxLength="36" Nullable="false" />
+    <Property Name="AccountCode" Type="varchar" MaxLength="10" Nullable="false" />
+    <Property Name="TypeId" Type="int" />
+    <Property Name="Fullname" Type="nvarchar" MaxLength="64" />
+    <Property Name="Address" Type="nvarchar" MaxLength="128" />
+    <Property Name="Email" Type="nvarchar" MaxLength="128" />
+    <Property Name="Phone" Type="nvarchar" MaxLength="128" />
+    <Property Name="Picture" Type="nvarchar" MaxLength="256" />
+    <Property Name="Balance" Type="float" />
+    <Property Name="CreateDate" Type="date" />
+    <Property Name="FlagDelete" Type="date" />
+  </EntityType>
+  <EntityType Name="AccountTypes">
+    <Key>
+      <PropertyRef Name="TypeId" />
+    </Key>
+    <Property Name="TypeId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="TypeName" Type="nvarchar" MaxLength="100" />
+    <Property Name="MaxOfMoney" Type="float" />
+    <Property Name="WithDrawMin" Type="float" />
+    <Property Name="WithDrawMax" Type="float" />
+    <Property Name="MaxOfTimesForDay" Type="float" />
+    <Property Name="FlagDelete" Type="date" />
+  </EntityType>
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="principal_id" Type="int" Nullable="false" />
+    <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="version" Type="int" />
+    <Property Name="definition" Type="varbinary(max)" />
+  </EntityType>
+  <EntityType Name="Transfers">
+    <Key>
+      <PropertyRef Name="TransferId" />
+    </Key>
+    <Property Name="TransferId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="AccountSender" Type="varchar" MaxLength="36" />
+    <Property Name="AccountReceiver" Type="varchar" MaxLength="36" />
+    <Property Name="Amount" Type="float" />
+    <Property Name="LogDate" Type="datetime" />
+  </EntityType>
+  <Association Name="FK__AccountLo__Accou__173876EA">
+    <End Role="Accounts" Type="Self.Accounts" Multiplicity="0..1" />
+    <End Role="AccountLogs" Type="Self.AccountLogs" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Accounts">
+        <PropertyRef Name="AccountId" />
+      </Principal>
+      <Dependent Role="AccountLogs">
+        <PropertyRef Name="AccountId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Accounts__TypeId__145C0A3F">
+    <End Role="AccountTypes" Type="Self.AccountTypes" Multiplicity="0..1" />
+    <End Role="Accounts" Type="Self.Accounts" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AccountTypes">
+        <PropertyRef Name="TypeId" />
+      </Principal>
+      <Dependent Role="Accounts">
+        <PropertyRef Name="TypeId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Transfers__Accou__1A14E395">
+    <End Role="Accounts" Type="Self.Accounts" Multiplicity="0..1" />
+    <End Role="Transfers" Type="Self.Transfers" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Accounts">
+        <PropertyRef Name="AccountId" />
+      </Principal>
+      <Dependent Role="Transfers">
+        <PropertyRef Name="AccountSender" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Transfers__Accou__1B0907CE">
+    <End Role="Accounts" Type="Self.Accounts" Multiplicity="0..1" />
+    <End Role="Transfers" Type="Self.Transfers" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Accounts">
+        <PropertyRef Name="AccountId" />
+      </Principal>
+      <Dependent Role="Transfers">
+        <PropertyRef Name="AccountReceiver" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="BankModelStoreContainer">
+    <EntitySet Name="AccountLogs" EntityType="Self.AccountLogs" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Accounts" EntityType="Self.Accounts" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="AccountTypes" EntityType="Self.AccountTypes" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Transfers" EntityType="Self.Transfers" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK__AccountLo__Accou__173876EA" Association="Self.FK__AccountLo__Accou__173876EA">
+      <End Role="Accounts" EntitySet="Accounts" />
+      <End Role="AccountLogs" EntitySet="AccountLogs" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Accounts__TypeId__145C0A3F" Association="Self.FK__Accounts__TypeId__145C0A3F">
+      <End Role="AccountTypes" EntitySet="AccountTypes" />
+      <End Role="Accounts" EntitySet="Accounts" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Transfers__Accou__1A14E395" Association="Self.FK__Transfers__Accou__1A14E395">
+      <End Role="Accounts" EntitySet="Accounts" />
+      <End Role="Transfers" EntitySet="Transfers" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Transfers__Accou__1B0907CE" Association="Self.FK__Transfers__Accou__1B0907CE">
+      <End Role="Accounts" EntitySet="Accounts" />
+      <End Role="Transfers" EntitySet="Transfers" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

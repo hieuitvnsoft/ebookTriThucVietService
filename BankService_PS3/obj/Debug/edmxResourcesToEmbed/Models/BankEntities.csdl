@@ -1,0 +1,140 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="BankModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="AccountLog">
+    <Key>
+      <PropertyRef Name="LogId" />
+    </Key>
+    <Property Name="LogId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="AccountId" Type="String" MaxLength="36" FixedLength="false" Unicode="false" />
+    <Property Name="Amount" Type="Double" />
+    <Property Name="LogDate" Type="DateTime" Precision="3" />
+    <Property Name="ActionLogs" Type="String" MaxLength="1" FixedLength="true" Unicode="false" />
+    <NavigationProperty Name="Account" Relationship="Self.FK__AccountLo__Accou__173876EA" FromRole="AccountLogs" ToRole="Accounts" />
+  </EntityType>
+  <EntityType Name="Account">
+    <Key>
+      <PropertyRef Name="AccountId" />
+    </Key>
+    <Property Name="AccountId" Type="String" MaxLength="36" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="AccountCode" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="TypeId" Type="Int32" />
+    <Property Name="Fullname" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+    <Property Name="Address" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="Email" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="Phone" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="Picture" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+    <Property Name="Balance" Type="Double" />
+    <Property Name="CreateDate" Type="DateTime" Precision="0" />
+    <Property Name="FlagDelete" Type="DateTime" Precision="0" />
+    <NavigationProperty Name="AccountLogs" Relationship="Self.FK__AccountLo__Accou__173876EA" FromRole="Accounts" ToRole="AccountLogs" />
+    <NavigationProperty Name="AccountType" Relationship="Self.FK__Accounts__TypeId__145C0A3F" FromRole="Accounts" ToRole="AccountTypes" />
+    <NavigationProperty Name="Transfers" Relationship="Self.FK__Transfers__Accou__1A14E395" FromRole="Accounts" ToRole="Transfers" />
+    <NavigationProperty Name="Transfers1" Relationship="Self.FK__Transfers__Accou__1B0907CE" FromRole="Accounts" ToRole="Transfers" />
+  </EntityType>
+  <EntityType Name="AccountType">
+    <Key>
+      <PropertyRef Name="TypeId" />
+    </Key>
+    <Property Name="TypeId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TypeName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="MaxOfMoney" Type="Double" />
+    <Property Name="WithDrawMin" Type="Double" />
+    <Property Name="WithDrawMax" Type="Double" />
+    <Property Name="MaxOfTimesForDay" Type="Double" />
+    <Property Name="FlagDelete" Type="DateTime" Precision="0" />
+    <NavigationProperty Name="Accounts" Relationship="Self.FK__Accounts__TypeId__145C0A3F" FromRole="AccountTypes" ToRole="Accounts" />
+  </EntityType>
+  <EntityType Name="sysdiagram">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="principal_id" Type="Int32" Nullable="false" />
+    <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="version" Type="Int32" />
+    <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+  </EntityType>
+  <EntityType Name="Transfer">
+    <Key>
+      <PropertyRef Name="TransferId" />
+    </Key>
+    <Property Name="TransferId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="AccountSender" Type="String" MaxLength="36" FixedLength="false" Unicode="false" />
+    <Property Name="AccountReceiver" Type="String" MaxLength="36" FixedLength="false" Unicode="false" />
+    <Property Name="Amount" Type="Double" />
+    <Property Name="LogDate" Type="DateTime" Precision="3" />
+    <NavigationProperty Name="Account" Relationship="Self.FK__Transfers__Accou__1A14E395" FromRole="Transfers" ToRole="Accounts" />
+    <NavigationProperty Name="Account1" Relationship="Self.FK__Transfers__Accou__1B0907CE" FromRole="Transfers" ToRole="Accounts" />
+  </EntityType>
+  <Association Name="FK__AccountLo__Accou__173876EA">
+    <End Role="Accounts" Type="Self.Account" Multiplicity="0..1" />
+    <End Role="AccountLogs" Type="Self.AccountLog" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Accounts">
+        <PropertyRef Name="AccountId" />
+      </Principal>
+      <Dependent Role="AccountLogs">
+        <PropertyRef Name="AccountId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Accounts__TypeId__145C0A3F">
+    <End Role="AccountTypes" Type="Self.AccountType" Multiplicity="0..1" />
+    <End Role="Accounts" Type="Self.Account" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="AccountTypes">
+        <PropertyRef Name="TypeId" />
+      </Principal>
+      <Dependent Role="Accounts">
+        <PropertyRef Name="TypeId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Transfers__Accou__1A14E395">
+    <End Role="Accounts" Type="Self.Account" Multiplicity="0..1" />
+    <End Role="Transfers" Type="Self.Transfer" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Accounts">
+        <PropertyRef Name="AccountId" />
+      </Principal>
+      <Dependent Role="Transfers">
+        <PropertyRef Name="AccountSender" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Transfers__Accou__1B0907CE">
+    <End Role="Accounts" Type="Self.Account" Multiplicity="0..1" />
+    <End Role="Transfers" Type="Self.Transfer" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Accounts">
+        <PropertyRef Name="AccountId" />
+      </Principal>
+      <Dependent Role="Transfers">
+        <PropertyRef Name="AccountReceiver" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="BankEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="AccountLogs" EntityType="Self.AccountLog" />
+    <EntitySet Name="Accounts" EntityType="Self.Account" />
+    <EntitySet Name="AccountTypes" EntityType="Self.AccountType" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagram" />
+    <EntitySet Name="Transfers" EntityType="Self.Transfer" />
+    <AssociationSet Name="FK__AccountLo__Accou__173876EA" Association="Self.FK__AccountLo__Accou__173876EA">
+      <End Role="Accounts" EntitySet="Accounts" />
+      <End Role="AccountLogs" EntitySet="AccountLogs" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Accounts__TypeId__145C0A3F" Association="Self.FK__Accounts__TypeId__145C0A3F">
+      <End Role="AccountTypes" EntitySet="AccountTypes" />
+      <End Role="Accounts" EntitySet="Accounts" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Transfers__Accou__1A14E395" Association="Self.FK__Transfers__Accou__1A14E395">
+      <End Role="Accounts" EntitySet="Accounts" />
+      <End Role="Transfers" EntitySet="Transfers" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Transfers__Accou__1B0907CE" Association="Self.FK__Transfers__Accou__1B0907CE">
+      <End Role="Accounts" EntitySet="Accounts" />
+      <End Role="Transfers" EntitySet="Transfers" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>
